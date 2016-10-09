@@ -36,15 +36,29 @@ defmodule SimplerSlack do
       """
       @spec start_link(String.t) :: {:ok, pid}
       def start_link(token) do
-        json = get_json_from_rtm(HTTPoison.get("#{@rtm_url}?token=#{token}"))
-        {:ok, response} = Poison.Parser.parse(json)
+        {:ok, response} = "#{@rtm_url}?token=#{token}"
+          |> HTTPoison.get
+          |> get_json_from_rtm
+          |> Poison.Parser.parse
 
-        url = response["url"]
-        id = response["self"]["id"]
+        url = get_in(response, ["url"])
+        id = get_in(response, ["self", "id"])
         state = %{self: %{id: id}, token: token}
 
         SimplerSlack.Websocket.Client.start_link(url, __MODULE__, state)
       end
+
+      @doc """
+        Placeholder implementations of slack_message handler
+      """
+      @spec slack_message(SimplerSlack.Client.message_state) :: nil
+      def slack_message(_), do: nothing
+
+      @doc """
+        Placeholder implementations of slack_user_typing handler
+      """
+      @spec slack_user_typing(SimplerSlack.Client.message_state) :: nil
+      def slack_user_typing(_), do: nothing
 
       @doc """
         used to make things read a bit easier.
@@ -53,18 +67,17 @@ defmodule SimplerSlack do
 
         `def slack_user_typing(_, _), do: nothing`
       """
-      def nothing, do: nil
-
+      defp nothing, do: nil
       @doc """
       Gets the json from the RTM api response
       """
-      def get_json_from_rtm({:ok, %{body: json}}) do
+      defp get_json_from_rtm({:ok, %{body: json}}) do
         json
       end
       @doc """
       Handles errors from the RTM api
       """
-      def get_json_from_rtm({:erorr, _message}) do
+      defp get_json_from_rtm({:erorr, _message}) do
         raise SimplerSlack
       end
 
@@ -75,9 +88,11 @@ defmodule SimplerSlack do
       `format_user_id("the-id") # => <@the-id>`
       """
       @spec format_user_id(String.t) :: String.t
-      def format_user_id(user_id) do
+      defp format_user_id(user_id) do
         "<@#{user_id}>"
       end
+
+      defoverridable slack_message: 1, slack_user_typing: 1
     end
   end
 end

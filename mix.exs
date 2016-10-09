@@ -12,6 +12,8 @@ defmodule SimplerSlack.Mixfile do
      description: @description,
      package: package(),
      source_url: "https://github.com/gwash3189/simplerslack",
+     test_coverage: [tool: ExCoveralls],
+     preferred_cli_env: ["coveralls": :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test],
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps()]
@@ -29,7 +31,9 @@ defmodule SimplerSlack.Mixfile do
       {:websocket_client, "~> 1.1"},
       {:httpoison, "~> 0.9.0"},
       {:poison, "~> 2.0"},
-      {:ex_doc, "~> 0.14", only: :dev}
+      {:ex_doc, "~> 0.14", only: :dev},
+      {:mock, "~> 0.1.1", only: :test},
+      {:excoveralls, "~> 0.5", only: :test}
     ]
   end
 
