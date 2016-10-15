@@ -1,17 +1,14 @@
 defmodule SimplerSlack do
-  defexception message: """
-    an error occured when contacting the slack RTM endpoint.
-  """
   @moduledoc """
-  Used to create a basic slack bot which can receive `user_typing` or `message` events.
-  Can also send messages back.
+    Used to create a basic slack bot which can receive `user_typing` or `message` events.
+    Can also send messages back.
 
-  An example would be
-  ```
-  defmodule SimpleBot do
-    use SimplerSlack
+    An example would be
+    ```
+    defmodule SimpleBot do
+      use SimplerSlack
 
-    def slack_message(%{channel: channel, token: token, user: _user} = state) do
+      def slack_message(%{channel: channel, token: token, user: _user} = state) do
       IO.inspect state
       send_message("Hey, i got a message", channel, token)
     end
@@ -19,10 +16,12 @@ defmodule SimplerSlack do
     # nothing is a function provided by SimplerSlack
     # thought it looked better than returning nil
     def slack_user_typing(_), do: nothing
-  end
 
-  SimpleBot.start_link "the-token"
- ```
+    SimpleBot.start_link "the-token"
+  ```
+  """
+  defexception message: """
+    an error occured when contacting the slack RTM endpoint.
   """
   defmacro __using__(_) do
     quote do
@@ -67,17 +66,17 @@ defmodule SimplerSlack do
 
         `def slack_user_typing(_, _), do: nothing`
       """
-      defp nothing, do: nil
+      def nothing, do: nil
       @doc """
       Gets the json from the RTM api response
       """
-      defp get_json_from_rtm({:ok, %{body: json}}) do
+      def get_json_from_rtm({:ok, %{body: json}}) do
         json
       end
       @doc """
       Handles errors from the RTM api
       """
-      defp get_json_from_rtm({:erorr, _message}) do
+      def get_json_from_rtm({:erorr, _message}) do
         raise SimplerSlack
       end
 
@@ -88,7 +87,7 @@ defmodule SimplerSlack do
       `format_user_id("the-id") # => <@the-id>`
       """
       @spec format_user_id(String.t) :: String.t
-      defp format_user_id(user_id) do
+      def format_user_id(user_id) do
         "<@#{user_id}>"
       end
 

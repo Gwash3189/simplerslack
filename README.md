@@ -11,7 +11,7 @@ The idea behind this package is that it has a very small surface area. As such, 
 
     ```elixir
     def deps do
-      [{:simpler_slack, "~> 0.0.2"}]
+      [{:simpler_slack, "~> 0.0.3"}]
     end
     ```
 
