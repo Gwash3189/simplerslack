@@ -11,7 +11,7 @@ The idea behind this package is that it has a very small surface area. As such, 
 
     ```elixir
     def deps do
-      [{:simpler_slack, "~> 0.0.4"}]
+      [{:simpler_slack, "~> 0.0.5"}]
     end
     ```
   2. Ensure the following OTP applications are started

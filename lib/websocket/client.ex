@@ -80,8 +80,8 @@ defmodule SimplerSlack.Websocket.Client do
     message
   end
 
-  defp is_valid?(%{type: "message", text: text, channel: channel} = message, %{self: %{id: id}}) do
-    case valid_message?(text, id, channel) do
+  defp is_valid?(%{type: "message", text: text, channel: channel, user: user} = message, %{self: %{id: id}}) do
+    case valid_message?(text, id, user, channel) do
       false -> {:error, "message does not contain bot id"}
       true -> message
     end
@@ -117,7 +117,7 @@ defmodule SimplerSlack.Websocket.Client do
     {:reconnect, state}
   end
 
-  defp valid_message?(text, id, channel) do
-    String.contains?(text, "<@#{id}>") || String.starts_with?(channel, "D")
+  defp valid_message?(text, id, user, channel) do
+    String.contains?(text, "<@#{id}>") || (String.starts_with?(channel, "D") && user != id)
   end
 end
