@@ -47,6 +47,15 @@ defmodule SimplerSlack.WebSocket.ClientTest do
 
       assert response == {:ok, state}
     end
+
+    test "that is from a DM channel, it is ok" do
+      state = %{self: %{id: 123}, module: SampleBot}
+      message = {:text, "{\"type\": \"nope\", \"text\": \"<@123> hello\", \"channel\": \"D000\"}"}
+
+      response = SimplerSlack.Websocket.Client.websocket_handle(message, nil, state)
+
+      assert response == {:ok, state}
+    end
   end
 
   describe "when sent a user_typeing message" do
