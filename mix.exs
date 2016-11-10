@@ -6,7 +6,7 @@ defmodule SimplerSlack.Mixfile do
   """
   def project do
     [app: :simpler_slack,
-     version: "0.0.5",
+     version: "0.0.6",
      elixir: "~> 1.3",
      name: "SimplerSlack",
      description: @description,

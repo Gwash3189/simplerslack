@@ -11,7 +11,7 @@ The idea behind this package is that it has a very small surface area. As such, 
 
     ```elixir
     def deps do
-      [{:simpler_slack, "~> 0.0.5"}]
+      [{:simpler_slack, "~> 0.0.6"}]
     end
     ```
   2. Ensure the following OTP applications are started
@@ -34,15 +34,16 @@ defmodule SimpleBot do
    IO.inspect state
    send_message("Hey <@#{format_user_id(user)}>", channel, token)
  end
-
- def slack_user_typing(_), do: nothing
 end
 
 SimpleBot.start_link("your-slack-token")
 ```
 
-This adds the behaviour `SimplerSlack.Client` to the module. This means you must
-implement both `slack_message(state)` and `slack_user_typing(state)`.
+This adds the behaviour `SimplerSlack.Client` to the module. This means to get messages, you must
+implement either `slack_message(state)` or `slack_user_typing(state)`.
+
+`slack_message` is for when a message is sent to your bot, but not by your bot.
+`slack_user_typing` is for when a user is typing in a channel that your bot is in.
 
 Both of those function must also return `nil`. These functions are `cast`'s, so
 they are concurrent. If you want to keep things quick, i'd suggest keeping These
