@@ -23,7 +23,7 @@ defmodule SimplerSlack.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :crypto, :ssl, :httpoison]]
+    [applications: [:logger, :crypto, :ssl, :httpoison, :poison]]
   end
 
   defp deps do
